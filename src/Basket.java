@@ -13,11 +13,11 @@ public class Basket {
         this.shop = new Shop();
     }
 
-    public boolean add(String name, Integer count) {//действие
+    public boolean add(String name, Integer count) {
         if (!checkProduct(name)) return false;
         Product p = shop.getProduct(name);
         if (canAdd(p, count)) {
-            shoppingList.put(p, shoppingList.getOrDefault(p, 0) + count);//действие
+            shoppingList.put(p, shoppingList.getOrDefault(p, 0) + count);
             return true;
         }
         return false;
