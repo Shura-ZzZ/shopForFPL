@@ -13,7 +13,7 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;//действие
         Product product = (Product) o;//действие
-        return name.trim().equalsIgnoreCase(product.name.trim());//действие
+        return name.trim().equalsIgnoreCase(product.name.trim());//действие//неявный вход
     }
 
     public String getName() {
