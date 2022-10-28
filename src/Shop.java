@@ -34,10 +34,10 @@ public class Shop {
 
     }
 
-    public boolean isAdultProduct(String name){
+    public boolean isAdultProduct(String name){//действие
         return ADULT_PRODUCTS.contains(new Product(name,0.0));
     }
-    public List<Product> allProducts(){
+    public List<Product> allProducts(){//действие
         List<Product> result = new ArrayList<>(ADULT_PRODUCTS);
         result.addAll(PRODUCTS);
         return result;
