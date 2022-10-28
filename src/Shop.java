@@ -22,24 +22,37 @@ public class Shop {
     ));
 
 
-    public boolean hasProduct(String name){
+    public boolean hasProduct(String name) {
+        return hasProduct(name, PRODUCTS, ADULT_PRODUCTS);
+    }
 
-        return allProducts().contains(new Product(name,0.0));
+    public boolean hasProduct(String name, List<Product> listProduct, List<Product> adultList) {
+
+        return listAddList(listProduct, adultList).contains(new Product(name, 0.0));
 
     }
 
-    public Product getProduct(String name){
+    public Product getProduct(String name) {
 
-        return allProducts().stream().filter(p-> p.getName().equals(name)).findFirst().orElse(null);
+        return getProduct(name, PRODUCTS, ADULT_PRODUCTS);
 
     }
 
-    public boolean isAdultProduct(String name){//действие
-        return ADULT_PRODUCTS.contains(new Product(name,0.0));//неявный вход
+    public Product getProduct(String name, List<Product> listProduct, List<Product> adultList) {
+        return listAddList(listProduct, adultList).stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
     }
-    public List<Product> allProducts(){//действие
-        List<Product> result = new ArrayList<>(ADULT_PRODUCTS);//неявный вход
-        result.addAll(PRODUCTS);//неявный вход
+
+    public boolean isAdultProduct(String name) {
+        return isAdultProduct(name, ADULT_PRODUCTS);
+    }
+
+    public boolean isAdultProduct(String name, List<Product> adultList) {
+        return adultList.contains(new Product(name, 0.0));
+    }
+
+    public List<Product> listAddList(List<Product> list1, List<Product> list2) {
+        List<Product> result = new ArrayList<>(list1);
+        result.addAll(list2);
         return result;
     }
 
