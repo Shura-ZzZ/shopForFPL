@@ -14,32 +14,45 @@ public class Basket {
     }
 
     public boolean add(String name, Integer count) {
-        return add(name, count, shop, buyer, shoppingList);
+        Map<Product, Integer> nm = add(name, count, shop, buyer, shoppingList);
+        if (nm == null) return false;
+        this.shoppingList = nm;
+        return true;
     }
 
-    private boolean add(String name, Integer count, Shop sh, Buyer b, Map<Product, Integer> shopList) {
-        if (!checkProduct(name, sh, b)) return false;
+
+    private Map<Product, Integer> add(String name, Integer count, Shop sh, Buyer b, Map<Product, Integer> shopList) {
         Product p = sh.getProduct(name);
-        if (canAdd(p, count, b, shopList)) {
-            shopList.put(p, shopList.getOrDefault(p, 0) + count);
-            return true;
-        }
-        return false;
+        if (p == null) return null;
+        if (!checkAge(isAdultProduct(name, sh), b.getAge())) return null;
+        Map<Product, Integer> newMap = addItem(shopList, p, count);
+        if (negativeBalance(newMap, b.getCash())) return null;
+        return newMap;
     }
+
 
     @Override
     public String toString() {
-        return receipt(shoppingList, buyer);
+        return receipt(shoppingList, buyer.getCash());
     }
 
-    public String receipt(Map<Product, Integer> shopList, Buyer b) {
+    public String receipt(Map<Product, Integer> shopList, Double cash) {
         String str = "";
         for (Product p : shopList.keySet()) {
-            str += String.format("%s - %s - %s р.\n", p.getName(), shopList.get(p), p.getPrice() * shopList.get(p));
+            str += line(p.getName(), p.getPrice(), shopList.get(p));
         }
-        str += "-----------\n";
-        str += "Итого: " + sum(shopList) + "p.\n";
-        str += "Осталось: " + diff(b, shopList) + "p.\n";
+        str += end(sum(shopList), diff(cash, shopList));
+        return str;
+    }
+
+    private String line(String name, Double price, Integer count) {
+        return String.format("%s - %s - %s р.\n", name, count, price * count);
+    }
+
+    private String end(Double sum, Double diff) {
+        String str = "-----------\n";
+        str += "Итого: " + sum + "p.\n";
+        str += "Осталось: " + diff + "p.\n";
         return str;
     }
 
@@ -51,20 +64,26 @@ public class Basket {
         return sum;
     }
 
-
-    private Double diff(Buyer b, Map<Product, Integer> shopList) {
-        return b.getCash() - sum(shopList);
+    private Double diff(Double cash, Map<Product, Integer> shopList) {
+        return cash - sum(shopList);
     }
 
-    private boolean canAdd(Product p, Integer count, Buyer b, Map<Product, Integer> shopList) {
-        return sum(shopList) + p.getPrice() * count <= b.getCash();
+    private Map<Product, Integer> addItem(Map<Product, Integer> map, Product p, Integer count) {
+        Map<Product, Integer> newMap = new HashMap<>(map);
+        newMap.put(p, newMap.getOrDefault(p, 0) + count);
+        return newMap;
     }
 
+    private boolean negativeBalance(Map<Product, Integer> map, Double cash) {
+        return sum(map) > cash;
+    }
 
-    private boolean checkProduct(String p, Shop sh, Buyer b) {
-        if (!sh.hasProduct(p)) return false;
-        if (b.getAge() < 18 && sh.isAdultProduct(p)) return false;
-        return true;
+    private boolean checkAge(Boolean adultProduct, Integer age) {
+        return age >= 18 || !adultProduct;
+    }
+
+    private boolean isAdultProduct(String p, Shop sh) {
+        return sh.isAdultProduct(p);
     }
 
 }

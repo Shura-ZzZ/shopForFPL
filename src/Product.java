@@ -25,7 +25,6 @@ public class Product {
         return n1.trim().equalsIgnoreCase(n2.trim());
     }
 
-
     public String getName() {
         return name;
     }

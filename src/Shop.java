@@ -22,32 +22,17 @@ public class Shop {
     ));
 
 
-    public boolean hasProduct(String name) {
-        return hasProduct(name, PRODUCTS, ADULT_PRODUCTS);
-    }
-
-    public boolean hasProduct(String name, List<Product> listProduct, List<Product> adultList) {
-
-        return listAddList(listProduct, adultList).contains(new Product(name, 0.0));
-
-    }
-
     public Product getProduct(String name) {
-
-        return getProduct(name, PRODUCTS, ADULT_PRODUCTS);
-
-    }
-
-    public Product getProduct(String name, List<Product> listProduct, List<Product> adultList) {
-        return listAddList(listProduct, adultList).stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+        List<Product> listAllProducts = listAddList(PRODUCTS, ADULT_PRODUCTS);
+        return getProductFromList(listAllProducts, name);
     }
 
     public boolean isAdultProduct(String name) {
-        return isAdultProduct(name, ADULT_PRODUCTS);
+        return findInProductList(ADULT_PRODUCTS, name);
     }
 
-    public boolean isAdultProduct(String name, List<Product> adultList) {
-        return adultList.contains(new Product(name, 0.0));
+    public boolean findInProductList(List<Product> list, String name) {
+        return list.stream().anyMatch(x -> x.getName().equals(name));
     }
 
     public List<Product> listAddList(List<Product> list1, List<Product> list2) {
@@ -56,4 +41,7 @@ public class Shop {
         return result;
     }
 
+    public Product getProductFromList(List<Product> list, String name) {
+        return list.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+    }
 }
