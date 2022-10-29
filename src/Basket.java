@@ -36,7 +36,7 @@ public class Basket {
         return receipt(shoppingList, buyer.getCash());
     }
 
-    public String receipt(Map<Product, Integer> shopList, Double cash) {
+    private String receipt(Map<Product, Integer> shopList, Double cash) {
         String str = "";
         for (Product p : shopList.keySet()) {
             str += line(p.getName(), p.getPrice(), shopList.get(p));
@@ -56,7 +56,7 @@ public class Basket {
         return str;
     }
 
-    public Double sum(Map<Product, Integer> shopList) {
+    private Double sum(Map<Product, Integer> shopList) {
         Double sum = 0.0;
         for (Product p : shopList.keySet()) {
             sum += p.getPrice() * shopList.get(p);

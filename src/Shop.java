@@ -31,17 +31,17 @@ public class Shop {
         return findInProductList(ADULT_PRODUCTS, name);
     }
 
-    public boolean findInProductList(List<Product> list, String name) {
+    private boolean findInProductList(List<Product> list, String name) {
         return list.stream().anyMatch(x -> x.getName().equals(name));
     }
 
-    public List<Product> listAddList(List<Product> list1, List<Product> list2) {
+    private List<Product> listAddList(List<Product> list1, List<Product> list2) {
         List<Product> result = new ArrayList<>(list1);
         result.addAll(list2);
         return result;
     }
 
-    public Product getProductFromList(List<Product> list, String name) {
+    private Product getProductFromList(List<Product> list, String name) {
         return list.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
     }
 }
